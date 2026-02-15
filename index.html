@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,12 +116,16 @@
     <!-- Theme Toggle -->
     <button onclick="toggleTheme()" class="fixed bottom-6 right-6 z-50 p-4 bg-white dark:bg-slate-800 text-orange-600 dark:text-orange-400 rounded-full shadow-lg border border-slate-200 dark:border-slate-700">
         <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            <!-- Sun icon (for dark mode) -->
+            <path id="sun-path" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 18v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l.707.707M6.343 6.343l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+            <!-- Moon icon (for light mode) -->
+            <path id="moon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
     </button>
 
     <div class="max-w-6xl mx-auto flex-grow w-full">
         <header class="text-center mb-8">
+            <br>
             <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">Class of 2017</h1>
             <p class="text-slate-500 dark:text-slate-400 text-lg">The Greatest Class Of All Time</p>
             <div class="h-1 w-20 bg-orange-600 mx-auto mt-4 rounded-full"></div>
@@ -301,7 +305,17 @@
         }
 
         function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.toggle('dark');
+            const sunPath = document.getElementById('sun-path');
+            const moonPath = document.getElementById('moon-path');
+            
+            if (isDark) {
+                sunPath.classList.remove('hidden');
+                moonPath.classList.add('hidden');
+            } else {
+                sunPath.classList.add('hidden');
+                moonPath.classList.remove('hidden');
+            }
         }
 
         function openSimpleModal(title, text) {
@@ -314,7 +328,17 @@
             document.getElementById('app-modal').style.display = 'none';
         }
 
-        renderProfiles();
+        // Initialize view
+        window.onload = () => {
+            renderProfiles();
+            // Sync initial theme toggle icon
+            const sunPath = document.getElementById('sun-path');
+            const moonPath = document.getElementById('moon-path');
+            if (document.documentElement.classList.contains('dark')) {
+                sunPath.classList.remove('hidden');
+                moonPath.classList.add('hidden');
+            }
+        };
     </script>
 </body>
 </html>
