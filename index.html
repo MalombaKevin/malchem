@@ -121,16 +121,26 @@
     </button>
 
     <div class="max-w-6xl mx-auto flex-grow w-full">
-        <header class="text-center mb-12">
+        <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">Class of 2017</h1>
             <p class="text-slate-500 dark:text-slate-400 text-lg">The Greatest Class Of All Time</p>
             <div class="h-1 w-20 bg-orange-600 mx-auto mt-4 rounded-full"></div>
         </header>
 
         <!-- Feature Buttons -->
-        <div class="flex justify-center gap-4 mb-8">
+        <div class="flex justify-center gap-4 mb-6">
             <button onclick="openSimpleModal('Gallery', 'Coming Soon')" class="px-6 py-3 bg-orange-600 text-white font-bold rounded-xl shadow-md transition-transform hover:scale-105 active:scale-95">Gallery</button>
             <button onclick="openSimpleModal('Podcast', 'Coming Soon')" class="px-6 py-3 bg-slate-800 text-white font-bold rounded-xl shadow-md transition-transform hover:scale-105 active:scale-95">Podcast</button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="max-w-md mx-auto mb-8 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search name, course, lecturer" class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-800 rounded-2xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 sm:text-sm transition-all shadow-sm">
         </div>
 
         <!-- Filter Navigation -->
@@ -169,6 +179,7 @@
             { id: 2, name: "Edwin Oduor", course: ["Industrial"], bio: "Edwin focused on Industrial Biotechnology.", quote: "Akili ni Nywele", color: "#059669" },
             { id: 3, name: "Harrison Andeko", course: ["Medical"], bio: "Harrison specialized in Medical Biochemistry.", quote: "Ndoyeye - Vijana Hoyee", color: "#d97706" },
             { id: 4, name: "Isaac Okello", course: ["Bioengineering", "Lecturer"], bio: "Master of Bioinformatics and Biochemistry, bridging the gap between biological insights and computational engineering.", quote: "Biro biro engineer", color: "#db2777" },
+            { id: 18, name: "Fred Odegu", course: ["Biochemistry"], bio: "Mancity fan", quote: "I love jamaican women, kenyan women, latino women, chinese women, russian women", color: "#0ea5e9" },
             { id: 21, name: "Prof. Wamunyokoli", course: ["Lecturer"], bio: "He lectured on Biochemistry of tumours and cell and Molecular immunology.", quote: "Read my stuff", color: "#1e293b" },
             { id: 22, name: "Dr. Kevin Mbogo", course: ["Lecturer"], bio: "Cool lecturer, who taught biotechniques and instrumentation.", quote: "Do indicate that..", color: "#334155" },
             { id: 23, name: "Dr. Balleraine", course: ["Lecturer"], bio: "Our shosh, intellectual grandma.", quote: "That will come in exams", color: "#475569" },
@@ -187,6 +198,8 @@
             { id: 17, name: "Kennedy Muguna", course: ["Biochemistry"], bio: "Biochem turned Doctor, arsenal fan.", quote: "AN apple a day...", color: "#ef4444" }
         ];
 
+        let currentCategory = 'All';
+
         function getDnaSvg(color, size = "w-16 h-16") {
             const nodes = Array.from({ length: 5 }).map((_, i) => {
                 const y = 6 + i * 3;
@@ -202,6 +215,10 @@
 
         function renderProfiles(data = students) {
             const grid = document.getElementById('profiles-grid');
+            if (data.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-20 text-center text-slate-500">No profiles found matching your search.</div>`;
+                return;
+            }
             grid.innerHTML = data.map(s => `
                 <div class="profile-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center">
                     <div class="w-20 h-20 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 mb-4 flex items-center justify-center">
@@ -214,6 +231,16 @@
                     </button>
                 </div>
             `).join('');
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = students.filter(s => {
+                const matchesSearch = s.name.toLowerCase().includes(query) || s.bio.toLowerCase().includes(query) || s.quote.toLowerCase().includes(query) || s.course.some(c => c.toLowerCase().includes(query));
+                const matchesCategory = currentCategory === 'All' || s.course.includes(currentCategory);
+                return matchesSearch && matchesCategory;
+            });
+            renderProfiles(filtered);
         }
 
         function openCommentaryModal(id) {
@@ -229,13 +256,13 @@
                 <div class="carousel-placeholder mb-6">
                     <div class="text-center">
                         ${getDnaSvg(student.color, "w-20 h-20")}
-                        <p class="text-slate-500 mt-4 text-xs tracking-widest uppercase">The Vault</p>
+                        <p class="text-slate-500 mt-4 text-xs tracking-widest uppercase">Legend</p>
                     </div>
                 </div>
 
                 <div class="space-y-6">
                     <div>
-                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Biography</h4>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">About</h4>
                         <p class="text-slate-600 dark:text-slate-300 leading-relaxed">${student.bio}</p>
                     </div>
                     <div>
@@ -264,12 +291,13 @@
         }
 
         function filterProfiles(cat) {
+            currentCategory = cat;
             const buttons = document.querySelectorAll('.nav-btn');
             buttons.forEach(b => {
                 if(b.innerText === cat) b.classList.add('active');
                 else b.classList.remove('active');
             });
-            renderProfiles(cat === 'All' ? students : students.filter(s => s.course.includes(cat)));
+            handleSearch(); // Triggers the combined filter/search logic
         }
 
         function toggleTheme() {
