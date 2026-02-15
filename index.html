@@ -10,12 +10,6 @@
     <meta property="og:description" content="Biochemistry Family 2013">
     <meta property="og:image" content="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=1200">
     <meta property="og:type" content="website">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Biochemistry Class of 2017 Profiles">
-    <meta name="twitter:description" content="Biochemistry Family 2013">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=1200">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,17 +26,17 @@
         }
 
         .profile-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .profile-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .modal-overlay {
-            background-color: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(4px);
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
             display: none;
             position: fixed;
             top: 0;
@@ -56,14 +50,30 @@
         }
 
         .modal-content {
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
-            animation: modalScale 0.3s ease-out;
-            transition: background-color 0.3s ease;
+            max-height: 90vh; /* Prevents overflow on small screens */
+            display: flex;
+            flex-direction: column;
+            animation: modalScale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #modal-body {
+            overflow-y: auto; /* Allows scrolling inside the modal */
+            scrollbar-width: thin;
+            scrollbar-color: #ea580c transparent;
+        }
+
+        #modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        #modal-body::-webkit-scrollbar-thumb {
+            background-color: #ea580c;
+            border-radius: 10px;
         }
 
         @keyframes modalScale {
-            from { opacity: 0; transform: scale(0.95); }
+            from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -73,15 +83,16 @@
             border-color: #ea580c;
         }
 
-        .search-container {
+        .carousel-placeholder {
+            background: #000;
+            aspect-ratio: 16 / 9;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
             position: relative;
-            max-width: 400px;
-            width: 100%;
-            margin: 0 auto 2rem auto;
-        }
-
-        #theme-toggle {
-            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);
         }
 
         /* DNA Animation Keyframes */
@@ -102,425 +113,177 @@
         <span class="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Biochemistry Department</span>
     </nav>
 
-    <!-- Theme Toggle Button -->
-    <button id="theme-toggle" onclick="toggleTheme()" class="fixed bottom-20 right-6 z-50 p-4 bg-white dark:bg-slate-800 text-orange-600 dark:text-orange-400 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 transition-all hover:scale-110 active:scale-95">
-        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
-        </svg>
-        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="fixed bottom-6 right-6 z-50 p-4 bg-white dark:bg-slate-800 text-orange-600 dark:text-orange-400 rounded-full shadow-lg border border-slate-200 dark:border-slate-700">
+        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
     </button>
 
-    <div class="max-w-6xl mx-auto flex-grow">
+    <div class="max-w-6xl mx-auto flex-grow w-full">
         <header class="text-center mb-12">
             <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">Class of 2017</h1>
             <p class="text-slate-500 dark:text-slate-400 text-lg">The Greatest Class Of All Time</p>
             <div class="h-1 w-20 bg-orange-600 mx-auto mt-4 rounded-full"></div>
         </header>
 
-        <!-- Feature Trigger Buttons -->
-        <div class="flex justify-center gap-4 mb-6">
-            <button onclick="openGalleryModal()" class="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-md transition-all hover:scale-105 active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Gallery
-            </button>
-            <button onclick="openPodcastModal()" class="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition-all hover:scale-105 active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-                Podcast
-            </button>
-        </div>
-
-        <!-- Search Section -->
-        <div class="search-container px-4">
-            <div class="relative">
-                <input type="text" id="profileSearch" placeholder="Search by name or course..." 
-                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm"
-                    onkeyup="handleSearch(event)">
-                <div class="absolute left-3 top-3.5 text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
+        <!-- Feature Buttons -->
+        <div class="flex justify-center gap-4 mb-8">
+            <button onclick="openSimpleModal('Gallery', 'Coming Soon')" class="px-6 py-3 bg-orange-600 text-white font-bold rounded-xl shadow-md transition-transform hover:scale-105 active:scale-95">Gallery</button>
+            <button onclick="openSimpleModal('Podcast', 'Coming Soon')" class="px-6 py-3 bg-slate-800 text-white font-bold rounded-xl shadow-md transition-transform hover:scale-105 active:scale-95">Podcast</button>
         </div>
 
         <!-- Filter Navigation -->
         <nav class="mb-12 flex flex-wrap justify-center gap-2">
-            <button onclick="filterProfiles('All')" class="nav-btn active px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all dark:text-slate-300">All</button>
-            <button onclick="filterProfiles('Biochemistry')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all dark:text-slate-300">Biochemistry</button>
-            <button onclick="filterProfiles('Industrial')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all dark:text-slate-300">Industrial</button>
-            <button onclick="filterProfiles('Medical')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all dark:text-slate-300">Medical</button>
-            <button onclick="filterProfiles('Bioengineering')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all dark:text-slate-300">Bioengineering</button>
+            <button onclick="filterProfiles('All')" class="nav-btn active px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold transition-all">All</button>
+            <button onclick="filterProfiles('Biochemistry')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold transition-all">Biochemistry</button>
+            <button onclick="filterProfiles('Industrial')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold transition-all">Industrial</button>
+            <button onclick="filterProfiles('Medical')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold transition-all">Medical</button>
+            <button onclick="filterProfiles('Bioengineering')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold transition-all">Bioengineering</button>
+            <button onclick="filterProfiles('Lecturer')" class="nav-btn px-5 py-2.5 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-semibold transition-all">Lecturer</button>
         </nav>
 
         <!-- Profiles Grid -->
         <div id="profiles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- JS will populate this -->
+            <!-- JS populated -->
         </div>
     </div>
 
-    <!-- Footer Section -->
-    <footer class="mt-16 py-8 border-t border-slate-200 dark:border-slate-800 text-center">
-        <p class="text-slate-500 dark:text-slate-400 text-sm">
-            Powered by <a href="https://malwike.com/" target="_blank" class="text-orange-600 dark:text-orange-400 font-semibold hover:underline">Malwike Technologies</a>
-        </p>
-    </footer>
-
-    <!-- Main Modal (used for Profiles and Gallery) -->
-    <div id="profile-modal" class="modal-overlay" onclick="closeModal(event)">
+    <!-- Modal Container -->
+    <div id="app-modal" class="modal-overlay" onclick="closeModal()">
         <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden relative" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-20 bg-white/80 dark:bg-slate-900/80 p-1 rounded-full backdrop-blur-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <div id="modal-body" class="p-8">
-                <!-- JS will populate this -->
+            <div id="modal-body" class="p-6 md:p-8">
+                <!-- JS populated -->
             </div>
         </div>
     </div>
 
     <script>
-        // Theme Toggle Logic
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        }
-
-        // Initialize theme
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-
-        // Student Data
         const students = [
-            {
-                id: 1,
-                name: "Kevin Malomba",
-                course: "Biochemistry",
-                bio: "Kevin specialized in Biochemistry, demonstrating a keen interest in molecular pathways and metabolic regulation during the 2017 academic session.",
-                quote: "You know who I am",
-                color: "#4f46e5"
-            },
-            {
-                id: 2,
-                name: "Edwin Oduor",
-                course: "Industrial",
-                bio: "Edwin focused on Industrial Biotechnology, exploring the applications of biological systems in large-scale manufacturing and process optimization.",
-                quote: "Akili ni Nywele",
-                color: "#059669"
-            },
-            {
-                id: 3,
-                name: "Harrison Andeko",
-                course: "Medical",
-                bio: "Harrison specialized in Medical Biochemistry, examining clinical applications and diagnostic biotechnology in modern healthcare.",
-                quote: "Ndoyeye - Vijana Hoyee",
-                color: "#d97706"
-            },
-            {
-                id: 4,
-                name: "Isaac Okello",
-                course: "Bioengineering",
-                bio: "A lecturer who has mastered Bioinformatics and Biochemistry, Isaac bridges the gap between biological insights and computational engineering solutions.",
-                quote: "Biro biro engineer",
-                color: "#db2777"
-            },
-            {
-                id: 5,
-                name: "Mercy Karani",
-                course: "Biochemistry",
-                bio: "Mercy specialized in Biochemistry, a key member of the 2017 cohort with a focus on life sciences and molecular biology.",
-                quote: "Tafuta Pesa",
-                color: "#8b5cf6"
-            },
-            {
-                id: 6,
-                name: "Prudence Gertie Kirui",
-                course: "Biochemistry",
-                bio: "Prudence pursued her studies in Biochemistry, contributing her academic excellence to the department during her tenure.",
-                quote: "I love you Malomba (:",
-                color: "#ec4899"
-            },
-            {
-                id: 7,
-                name: "Enosh Kolwalo",
-                course: "Biochemistry",
-                bio: "Enosh specialized in Biochemistry and is known for his unique perspective on social dynamics and leadership.",
-                quote: "Politics is my passion, marriage works",
-                color: "#0ea5e9"
-            },
-            {
-                id: 8,
-                name: "Fred Odegu",
-                course: "Biochemistry",
-                bio: "Mancity fan. Fred explored the intricacies of Biochemistry while maintaining a vibrant personality in the class.",
-                quote: "I love women. Asian women, Black women, latino women",
-                color: "#334155"
-            },
-            {
-                id: 9,
-                name: "Andrew Owoko",
-                course: "Biochemistry",
-                bio: "Class Rep. Andrew served as the primary student leader for the 2017 class, managing academic and administrative coordination.",
-                quote: "Napeleka assigments monday",
-                color: "#f97316"
-            },
-            {
-                id: 10,
-                name: "Iana Amke",
-                course: "Biochemistry",
-                bio: "Iana is a dedicated scholar in the field of Biochemistry, known for her sharp wit and academic enthusiasm.",
-                quote: "Oh Crap, Biochem is so easy",
-                color: "#10b981"
-            },
-            {
-                id: 11,
-                name: "Biko Reinhardt",
-                course: "Biochemistry",
-                bio: "Businessman, DJ. Biko balances his entrepreneurial spirit and musical talent with a background in life sciences.",
-                quote: "You are now listening to DJ Kobi",
-                color: "#6366f1"
-            },
-            {
-                id: 12,
-                name: "Vivian Kachuodho",
-                course: "Biochemistry",
-                bio: "Elegant, Queen. Vivian brought grace and leadership to the Biochemistry class of 2017.",
-                quote: "Hi besties",
-                color: "#f43f5e"
-            },
-            {
-                id: 13,
-                name: "Kennedy Muguna",
-                course: "Medical",
-                bio: "Biochem turned Doctor, Arsenal fan. Kennedy leveraged his biochemistry foundation to pursue a career in clinical medicine.",
-                quote: "AN apple a day...",
-                color: "#ef4444"
-            },
-            {
-                id: 14,
-                name: "Ruth Augo",
-                course: "Biochemistry",
-                bio: "Ruth is a standout member of the 2017 Biochemistry class, known for her vibrant personality and academic dedication.",
-                quote: "Augolicious babe",
-                color: "#a855f7"
-            },
-            {
-                id: 15,
-                name: "Felix Muendo",
-                course: "Biochemistry",
-                bio: "Bionformatics to the world. Felix is passionate about the intersection of biological data and computational science.",
-                quote: "Mtongoi",
-                color: "#14b8a6"
-            },
-            {
-                id: 16,
-                name: "Emelda",
-                course: "Biochemistry",
-                bio: "Emelda is recognized for her elegant approach to both her studies in Biochemistry and her contributions to class activities.",
-                quote: "Miss Elegante",
-                color: "#fb7185"
-            },
-            {
-                id: 17,
-                name: "Eddy",
-                course: "Biochemistry",
-                bio: "Eddy is a spirited member of the Biochemistry cohort, bringing energy and a unique voice to the department.",
-                quote: "Woof woof",
-                color: "#64748b"
-            },
-            {
-                id: 18,
-                name: "Janel",
-                course: "Biochemistry",
-                bio: "Janel contributed her academic insights and friendly demeanor to the Biochemistry Class of 2017.",
-                quote: "Waambaje",
-                color: "#fbbf24"
-            },
-            {
-                id: 19,
-                name: "Julius Opuoyo",
-                course: "Biochemistry",
-                bio: "A proud member of the Mulembe Nation, Julius combined his cultural identity with a rigorous study of Biochemistry.",
-                quote: "Mulembe Nation",
-                color: "#22c55e"
-            },
-            {
-                id: 20,
-                name: "Ethans Kiige",
-                course: "Biochemistry",
-                bio: "Ethans is known for his lighthearted approach and positive energy within the Biochemistry department.",
-                quote: "haha",
-                color: "#3b82f6"
-            }
+            { id: 1, name: "Kevin Malomba", course: ["Biochemistry"], bio: "Kevin specialized in Biochemistry.", quote: "You know who I am", color: "#4f46e5" },
+            { id: 2, name: "Edwin Oduor", course: ["Industrial"], bio: "Edwin focused on Industrial Biotechnology.", quote: "Akili ni Nywele", color: "#059669" },
+            { id: 3, name: "Harrison Andeko", course: ["Medical"], bio: "Harrison specialized in Medical Biochemistry.", quote: "Ndoyeye - Vijana Hoyee", color: "#d97706" },
+            { id: 4, name: "Isaac Okello", course: ["Bioengineering", "Lecturer"], bio: "Master of Bioinformatics and Biochemistry, bridging the gap between biological insights and computational engineering.", quote: "Biro biro engineer", color: "#db2777" },
+            { id: 21, name: "Prof. Wamunyokoli", course: ["Lecturer"], bio: "He lectured on Biochemistry of tumours and cell and Molecular immunology.", quote: "Read my stuff", color: "#1e293b" },
+            { id: 22, name: "Dr. Kevin Mbogo", course: ["Lecturer"], bio: "Cool lecturer, who taught biotechniques and instrumentation.", quote: "Do indicate that..", color: "#334155" },
+            { id: 23, name: "Dr. Balleraine", course: ["Lecturer"], bio: "Our shosh, intellectual grandma.", quote: "That will come in exams", color: "#475569" },
+            { id: 5, name: "Mercy Karani", course: ["Biochemistry"], bio: "Focus on life sciences.", quote: "Tafuta Pesa", color: "#8b5cf6" },
+            { id: 6, name: "Prudence Gertie Kirui", course: ["Biochemistry"], bio: "Academic excellence in life sciences.", quote: "I love you Malomba (:", color: "#ec4899" },
+            { id: 7, name: "Ruth Augo", course: ["Biochemistry"], bio: "Dedicated to the study of biological processes.", quote: "Augolicious babe", color: "#f43f5e" },
+            { id: 8, name: "Felix Muendo", course: ["Biochemistry"], bio: "Bioinformatics to the world.", quote: "Mtongoi", color: "#0ea5e9" },
+            { id: 9, name: "Emelda", course: ["Biochemistry"], bio: "Passionate about molecular biology.", quote: "Miss Elegante", color: "#d946ef" },
+            { id: 10, name: "Eddy", course: ["Biochemistry"], bio: "Exploring the chemical basis of life.", quote: "Woof woof", color: "#10b981" },
+            { id: 11, name: "Janel", course: ["Biochemistry"], bio: "Always curious about metabolic pathways.", quote: "Waambaje", color: "#f59e0b" },
+            { id: 12, name: "Julius Opuoyo", course: ["Biochemistry"], bio: "Passionate biochemist from Western Kenya.", quote: "Mulembe Nation", color: "#6366f1" },
+            { id: 13, name: "Ethans Kiige", course: ["Biochemistry"], bio: "Researching life's building blocks.", quote: "haha", color: "#14b8a6" },
+            { id: 14, name: "Iana Amke", course: ["Biochemistry"], bio: "Top-tier student navigating complex biochemical pathways.", quote: "Oh Crap, Biochem is so easy", color: "#fb7185" },
+            { id: 15, name: "Biko Reinhardt", course: ["Biochemistry"], bio: "Businessman, DJ.", quote: "You are now listening to DJ Kobi", color: "#334155" },
+            { id: 16, name: "Vivian Kachuodho", course: ["Biochemistry"], bio: "Elegant, Queen.", quote: "Hi besties", color: "#f472b6" },
+            { id: 17, name: "Kennedy Muguna", course: ["Biochemistry"], bio: "Biochem turned Doctor, arsenal fan.", quote: "AN apple a day...", color: "#ef4444" }
         ];
 
-        let currentFilter = 'All';
-
-        function createAvatar(color) {
-            const basePairs = Array.from({ length: 5 }).map((_, i) => {
+        function getDnaSvg(color, size = "w-16 h-16") {
+            const nodes = Array.from({ length: 5 }).map((_, i) => {
                 const y = 6 + i * 3;
                 const delay = i * 0.2;
-                return `
-                    <g class="dna-node" style="animation-delay: ${delay}s; transform-origin: 12px ${y}px;">
-                        <line x1="6" y1="${y}" x2="18" y2="${y}" stroke="${color}" stroke-width="1" opacity="0.4" />
-                        <circle cx="6" cy="${y}" r="1.5" fill="${color}" />
-                        <circle cx="18" cy="${y}" r="1.5" fill="#ea580c" />
-                    </g>
-                `;
+                return `<g class="dna-node" style="animation-delay: ${delay}s; transform-origin: 12px ${y}px;">
+                    <line x1="6" y1="${y}" x2="18" y2="${y}" stroke="${color}" stroke-width="0.8" opacity="0.4" />
+                    <circle cx="6" cy="${y}" r="1.5" fill="${color}" />
+                    <circle cx="18" cy="${y}" r="1.5" fill="#ea580c" />
+                </g>`;
             }).join('');
-
-            return `
-                <div class="w-24 h-24 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 mb-4 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
-                    <svg viewBox="0 0 24 24" class="w-16 h-16">
-                        ${basePairs}
-                    </svg>
-                </div>
-            `;
+            return `<svg viewBox="0 0 24 24" class="${size}">${nodes}</svg>`;
         }
 
-        function renderProfiles(filteredData = students) {
+        function renderProfiles(data = students) {
             const grid = document.getElementById('profiles-grid');
-            if (filteredData.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">No profiles found matching your criteria.</div>`;
-                return;
-            }
-            grid.innerHTML = filteredData.map(s => `
-                <div class="profile-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 cursor-pointer" onclick="openModal(${s.id})">
-                    ${createAvatar(s.color)}
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 text-center">${s.name}</h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium text-center uppercase tracking-wider mt-1">${s.course}</p>
-                    <div class="mt-4 flex justify-center">
-                        <span class="text-xs bg-slate-50 dark:bg-slate-800 text-slate-400 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">Click for Bio</span>
+            grid.innerHTML = data.map(s => `
+                <div class="profile-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 mb-4 flex items-center justify-center">
+                        ${getDnaSvg(s.color, "w-12 h-12")}
                     </div>
+                    <h3 class="text-lg font-bold text-center">${s.name}</h3>
+                    <p class="text-xs text-slate-500 text-center uppercase mb-6">${s.course.join(' & ')}</p>
+                    <button onclick="openCommentaryModal(${s.id})" class="px-6 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-orange-600 hover:text-white text-slate-600 dark:text-slate-300 font-bold rounded-full transition-all text-xs border border-slate-200 dark:border-slate-700">
+                        Read Bio
+                    </button>
                 </div>
             `).join('');
         }
 
-        function handleSearch(event) {
-            const query = (event?.target?.value || document.getElementById('profileSearch').value).toLowerCase();
-            const filtered = students.filter(s => {
-                const matchesSearch = s.name.toLowerCase().includes(query) || s.course.toLowerCase().includes(query);
-                const matchesFilter = currentFilter === 'All' || s.course === currentFilter;
-                return matchesSearch && matchesFilter;
-            });
-            renderProfiles(filtered);
-        }
-
-        function filterProfiles(category) {
-            currentFilter = category;
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText === category);
-            });
-            handleSearch();
-        }
-
-        function openModal(id) {
+        function openCommentaryModal(id) {
             const student = students.find(s => s.id === id);
-            const modal = document.getElementById('profile-modal');
             const body = document.getElementById('modal-body');
-
+            
             body.innerHTML = `
-                <div class="text-center">
-                    <div class="inline-block p-1 rounded-full border-2 border-slate-100 dark:border-slate-800 mb-4 transition-colors">
-                        ${createAvatar(student.color)}
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-50">${student.name}</h2>
-                    <p class="text-orange-600 dark:text-orange-400 font-bold mb-6">${student.course}</p>
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-slate-50">${student.name}</h2>
+                    <div class="h-1 w-12 bg-orange-600 mt-2 rounded-full"></div>
                 </div>
-                
+
+                <div class="carousel-placeholder mb-6">
+                    <div class="text-center">
+                        ${getDnaSvg(student.color, "w-20 h-20")}
+                        <p class="text-slate-500 mt-4 text-xs tracking-widest uppercase">The Vault</p>
+                    </div>
+                </div>
+
                 <div class="space-y-6">
                     <div>
-                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">About</h4>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Biography</h4>
                         <p class="text-slate-600 dark:text-slate-300 leading-relaxed">${student.bio}</p>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Favourite quote</h4>
-                        <p class="text-slate-700 dark:text-slate-200 font-medium italic">"${student.quote}"</p>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Signature Phrase</h4>
+                        <p class="text-slate-700 dark:text-slate-200 font-medium italic text-lg">"${student.quote}"</p>
                     </div>
-                    <div class="pt-4 border-t border-slate-50 dark:border-slate-800 flex gap-4">
-                        <div class="flex-1 text-center">
-                            <span class="block text-xl font-bold text-slate-800 dark:text-slate-100">2017</span>
-                            <span class="text-xs text-slate-400">Grad Year</span>
+
+                    <!-- Interactive Social Boxes -->
+                    <div class="grid grid-cols-3 gap-3 pt-4">
+                        <div class="bg-blue-600 hover:bg-blue-700 text-white p-3 md:p-4 rounded-xl text-center cursor-pointer transition-colors">
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-tighter">LinkedIn</span>
                         </div>
-                        <div class="flex-1 text-center border-x border-slate-50 dark:border-slate-800">
-                            <span class="block text-xl font-bold text-slate-800 dark:text-slate-100">BSc</span>
-                            <span class="text-xs text-slate-400">Degree</span>
+                        <div class="bg-blue-800 hover:bg-blue-900 text-white p-3 md:p-4 rounded-xl text-center cursor-pointer transition-colors">
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-tighter">Facebook</span>
                         </div>
-                        <div class="flex-1 text-center">
-                            <a href="https://linkedin.com" target="_blank" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-orange-100 dark:hover:bg-orange-900/40 hover:text-orange-600 transition-colors mt-1">
-                                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                                </svg>
-                            </a>
-                            <span class="block text-xs text-slate-400 mt-1">Connect</span>
+                        <div class="bg-orange-600 hover:bg-orange-700 text-white p-3 md:p-4 rounded-xl text-center cursor-pointer transition-colors">
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-tighter">Comments</span>
                         </div>
                     </div>
                 </div>
             `;
-
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+            
+            document.getElementById('app-modal').style.display = 'flex';
+            // Reset scroll position when opening
+            document.getElementById('modal-body').scrollTop = 0;
         }
 
-        function openGalleryModal() {
-            const modal = document.getElementById('profile-modal');
-            const body = document.getElementById('modal-body');
-
-            body.innerHTML = `
-                <div class="text-center py-10">
-                    <div class="w-20 h-20 bg-orange-100 dark:bg-orange-900/30 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2">Gallery</h2>
-                    <p class="text-lg text-slate-500 dark:text-slate-400 font-medium">Coming Soon</p>
-                    <div class="mt-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl text-slate-400 text-sm">
-                        We are currently digitizing memories from 2013-2017. Check back soon for the full collection!
-                    </div>
-                </div>
-            `;
-
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+        function filterProfiles(cat) {
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(b => {
+                if(b.innerText === cat) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            renderProfiles(cat === 'All' ? students : students.filter(s => s.course.includes(cat)));
         }
 
-        function openPodcastModal() {
-            const modal = document.getElementById('profile-modal');
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function openSimpleModal(title, text) {
             const body = document.getElementById('modal-body');
-
-            body.innerHTML = `
-                <div class="text-center py-10">
-                    <div class="w-20 h-20 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-200 dark:border-slate-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2">Podcast</h2>
-                    <p class="text-lg text-slate-500 dark:text-slate-400 font-medium">Coming Soon</p>
-                    <div class="mt-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl text-slate-400 text-sm">
-                        Conversations with the Class of 2017 are being recorded. Stay tuned for our first episode!
-                    </div>
-                </div>
-            `;
-
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+            body.innerHTML = `<div class="py-12 text-center"><h2 class="text-2xl font-bold mb-4">${title}</h2><p class="text-slate-500">${text}</p></div>`;
+            document.getElementById('app-modal').style.display = 'flex';
         }
 
         function closeModal() {
-            document.getElementById('profile-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+            document.getElementById('app-modal').style.display = 'none';
         }
 
         renderProfiles();
